@@ -32,5 +32,5 @@ The project is set up with a **CI/CD pipeline** using **GitLab CI/CD** and **Git
 
 1️⃣ Clone the repository:
 ```bash
-git clone https://gitlab.com/username/project-name.git
-cd project-name
+git clone https://gitlab.com/fawry-intern1/abdelrhman-mohamed-khader/task-2-q2.git
+cd task-2-q2
