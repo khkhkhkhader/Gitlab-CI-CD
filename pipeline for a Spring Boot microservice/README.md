@@ -1,7 +1,7 @@
 # 🚀 Spring Boot Microservice
 
 ## 📝 Overview
-This is a Spring Boot microservice project featuring clean code with integrated CI/CD using GitLab, as well as Docker and security scanning support.
+This is a simble Spring Boot project featuring integrated CI/CD using GitLab , as well as Docker and security scanning support.
 
 ## 🔧 Prerequisites
 - Java 24+
@@ -12,8 +12,8 @@ This is a Spring Boot microservice project featuring clean code with integrated 
 ## 🚀 Setup & Run
 ### Local Run
 Clone the repository and navigate into the project directory:
-git clone https://gitlab.com/username/project-name.git
-cd project-name
+git clone https://gitlab.com/khkhkhkhader/Gitlab-CI-CD.git
+cd 'Gitlab-CI-CD/pipeline for a Spring Boot microservice'/
 
 Build the project:
 mvn clean install
@@ -34,14 +34,4 @@ The project includes a GitLab CI/CD pipeline triggered automatically for every m
 - **Security Scan**: Trivy scans for vulnerabilities in Docker images and dependencies.
 - **Docker Publish**: Optional step to publish Docker images.
 - **Deploy or Test**: Additional stages can be configured based on your needs.
-
-## 📄 Project Structure
-src/
-Dockerfile
-.gitlab-ci.yml
-pom.xml
-README.md
-
-## 🛡️ Security
-Utilizes Trivy for scanning Docker images and dependencies before deployment.
 
