@@ -12,8 +12,8 @@ This is a simple Spring Boot project featuring integrated CI/CD using GitLab , a
 ## 🚀 Setup & Run
 ### Local Run
 Clone the repository and navigate into the project directory:
-git clone https://gitlab.com/khkhkhkhader/Gitlab-CI-CD.git
-cd 'Gitlab-CI-CD/pipeline for a Spring Boot microservice'/
+`git clone https://gitlab.com/khkhkhkhader/Gitlab-CI-CD.git
+cd 'Gitlab-CI-CD/pipeline for a Spring Boot microservice'/`
 
 Build the project:
 mvn clean install
