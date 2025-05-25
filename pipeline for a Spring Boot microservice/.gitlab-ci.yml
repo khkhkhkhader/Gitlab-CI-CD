@@ -1,0 +1,95 @@
+stages:
+  - build
+  - test
+  - dependency_scan
+  - container_scan
+  - deploy
+
+#  Build
+
+build:
+  stage: build
+  image: maven:3.9.9-eclipse-temurin-24
+  script:
+    - mvn clean package -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
+
+#  Test
+
+test:
+  stage: test
+  image: maven:3.9.9-eclipse-temurin-24
+  script:
+    - mvn test
+
+#  SAST
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+
+#  Dependency Scanning
+
+dependency-scanning:
+  stage: dependency_scan
+  image: owasp/dependency-check:latest
+  script:
+    - dependency-check.sh --failOnCVSS 7 --project "hello-springboot-app" --scan .
+
+
+
+
+#   Container Scanning 
+
+container-scanning:
+  stage: container_scan
+  image: docker:latest
+
+  services:
+    - docker:dind
+
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_TLS_CERTDIR: ""
+
+  before_script:
+    - apk update 
+    - apk add curl wget unzip ca-certificates gnupg 
+    - wget https://github.com/aquasecurity/trivy/releases/download/v0.62.1/trivy_0.62.1_Linux-64bit.tar.gz 
+    - tar -xzf trivy_0.62.1_Linux-64bit.tar.gz 
+    - mv trivy /usr/local/bin/ 
+
+  script:
+
+    - docker build -t $CI_REGISTRY_IMAGE:latest .
+    - trivy image --severity HIGH,CRITICAL --exit-code 1 --timeout 20m $CI_REGISTRY_IMAGE:latest
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker push $CI_REGISTRY_IMAGE:latest
+
+
+  allow_failure: false
+
+
+
+
+#  Deployment
+
+deploy:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE:latest
+    - docker run -d --name myapp -p 8080:8080 $CI_REGISTRY_IMAGE:latest
+    - sleep 10
+    - docker exec myapp wget -qO- http://localhost:8080
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_TLS_CERTDIR: ""
+  only:
+    - main
+    
+
