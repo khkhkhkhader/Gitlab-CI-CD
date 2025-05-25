@@ -1,0 +1,59 @@
+stages:
+  - install
+  - test
+  - dependency-scanning
+  - deploy
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+
+install:
+  stage: install
+  image: node:24
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - build/
+
+lint-test:
+  stage: test
+  image: node:24
+  script:
+    - npm install
+    - npm run lint
+    - npm test -- --watchAll=false
+
+#  Gitlab SAST
+include:
+  - template: Security/SAST.gitlab-ci.yml
+
+
+
+dependency-scanning:
+  stage: dependency-scanning
+  image: node:24
+  script:
+    - npm audit --json > npm-audit-report.json || true
+  artifacts:
+    paths:
+    - npm-audit-report.json
+
+  allow_failure: true
+
+pages:
+  stage: deploy
+  dependencies:
+    - install
+  image: node:24
+  script:
+    - rm -rf public
+    - mv build public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
