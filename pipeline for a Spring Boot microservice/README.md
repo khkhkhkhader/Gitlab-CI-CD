@@ -1,7 +1,7 @@
 # 🚀 Spring Boot Microservice
 
 ## 📝 Overview
-This is a simble Spring Boot project featuring integrated CI/CD using GitLab , as well as Docker and security scanning support.
+This is a simple Spring Boot project featuring integrated CI/CD using GitLab , as well as Docker and security scanning support.
 
 ## 🔧 Prerequisites
 - Java 24+
